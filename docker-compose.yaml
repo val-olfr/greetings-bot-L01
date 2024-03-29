@@ -1,0 +1,60 @@
+version: "3.9"
+services:
+  poller:
+    image: gr_bot_poller
+    container_name: grb_poller
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_poller
+      labels:
+        purpose: "main bot poller component"
+      tags:
+        - "gr_bot_poller:1.0.0"
+    environment:
+      MONGO_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_PASS: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_HOST: db
+      GRBOT_TOKEN: ${GRBOT_TOKEN}
+    networks:
+      - backend
+    depends_on:
+      - db
+
+  worker:
+    image: gr_bot_worker
+    container_name: grb_worker
+    build:
+      context: .
+      dockerfile: ./dockerfiles/Dockerfile_worker
+      labels:
+        purpose: "main bot worker component"
+      tags:
+        - "gr_bot_worker:1.0.0"
+    environment:
+      MONGO_USER: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_PASS: ${MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_HOST: db
+      GRBOT_TOKEN: ${GRBOT_TOKEN}
+    networks:
+      - backend
+    depends_on:
+      - db
+
+  db:
+    image: "mongo:latest"
+    container_name: grb_mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - grb_mongodb_data:/data/db
+    networks:
+      - backend
+
+volumes:
+  grb_mongodb_data:
+
+networks:
+  backend:

@@ -1,0 +1,3 @@
+aiocron
+motor
+python-telegram-bot

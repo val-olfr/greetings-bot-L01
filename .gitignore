@@ -1,2 +1,4 @@
+# credentials file
 .env
-
+# local pyenv file
+run_env
