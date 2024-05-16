@@ -128,7 +128,7 @@ async def main():
     
     # cron_min1 = aiocron.crontab('* * * * * */30', func=msleep, args=("one",), start=True)
 
-    cron_3 = aiocron.crontab('5 */11 * * * *', func=sending_loop, args=(), start=True)
+    cron_3 = aiocron.crontab('5 */12 * * * 0,1', func=sending_loop, args=(), start=True)
 
     pprint(f'[{ts}] Worker was initiated')
 
